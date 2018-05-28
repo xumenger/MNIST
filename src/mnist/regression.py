@@ -27,3 +27,27 @@ correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
 # 计算准确率（把correct_prediction转换为tf.float32格式）
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
+'''保存训练结果、参数
+'''
+saver = tf.train.Saver(variables)
+
+'''开始训练
+'''
+with tf.Session as sess:
+    sess.run(tf.global_variables_initializer())
+    # 训练1000次
+    for _ in range(1000):
+        batch_xs, batch_ys = data.train.next_batch(100)
+        sess.run(train_step, feed_dict={x: batch_xs, y: batch_ys})
+    
+    # 训练完成后输出计算准确度
+    # x: data.test.images。测试结果集的数据
+    # y_: data.test.labels。测试结果集的标签
+    print((sess.run(accuracy, feed_dict={x: data.test.images, y_: data.test.labels})))
+    
+    # 保存参数、模型
+    path = savers.save(
+        sess, os.path.join(os.path.dirname(__file__), 'data', 'regression.ckpt'),
+        write_meta_graph=False, write_state=False)
+    # 打印模型路径
+    print("Saved: ", path)
