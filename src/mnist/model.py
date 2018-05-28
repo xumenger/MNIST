@@ -19,10 +19,10 @@ def regression(x):
 def convolutional(x, keep_prob):
     # 定义卷积层
     def conv2d(x, W):
-        return tf.nn.conv2d([1, 1, 1, 1], padding='SAME')
+        return tf.nn.conv2d(x,W,strides=[1,1,1,1], padding='SAME')
     # 定义池化层
     def max_pool_2x2(x):
-        return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1])
+        return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
     # 定义权重
     def weight_variable(shape):
         initial = tf.truncated_normal(shape, stddev=0.1)
@@ -51,7 +51,7 @@ def convolutional(x, keep_prob):
     h_pool2_float = tf.reshape(h_pool2, [-1, 7*7*64])
     h_fc1 = tf.nn.relu(tf.matmul(h_pool2_float, W_fc1) + b_fc1)
 
-    h_fc1_drop = tf.nn_dropout(h_fc1, keep_prob)
+    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
     W_fc2 = weight_variable([1024, 10])
     b_fc2 = bias_variable([10])
