@@ -3,9 +3,12 @@ class Main{
     // 构造函数，调用`var main = new Main();`时构造函数会被调用
     constructor(){
         // 根据id获取元素，这个需要和HTML开发者约定好接口
+        // 用户写数字的画布
         this.canvas = document.getElementById('main');
+        // 手写数字在input 生成对应缩略图
         this.input = document.getElementById('input');
 
+        // 设置画布的长和宽
         this.canvas.width = 449;   // 16 * 28 + 1
         this.canvas.height = 449;  // 16 * 28 + 1
         this.ctx = this.canvas.getContext('2d');
@@ -18,12 +21,15 @@ class Main{
         // 初始化
         this.initialize();
     }
+
     initialize(){
         this.ctx.fillStyle = '#FFFFFF';
         this.ctx.fillRect(0, 0, 449, 449);
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(0, 0, 449, 449);
         this.ctx.lineWidth = 0.05;
+
+        // 在main 画布上绘制横向和纵向分割线
         for(var i=0; i<27; i++){
             this.ctx.beginPath();
             this.ctx.moveTo((i+1)*16, 0);
@@ -38,17 +44,26 @@ class Main{
             this.ctx.stroke();
         }
         this.drawInput();
+
+        // 把output表格中的class为success的元素的class信息去除
         $('#output td').text('').removeClass('success');
     }
+    
+    // 鼠标放到main画布上发生点击时的回调函数
     onMouseDown(e){
         this.canvas.style.cursor = 'default';
         this.drawing = true;
         this.prev = this.getPosition(e.clientX, e.clientY);
     }
+
+    // 鼠标从main画布上松开后的回调函数
     onMouseUp(){
         this.drawing = false;
+        // drawInput()函数内部有使用AJAX向后台服务器发起请求的逻辑实现
         this.drawInput();
     }
+
+    // 鼠标在画布上移动对应的回调函数
     onMouseMove(e){
         if(this.drawing){
             var curr = this.getPosition(e.clientX, e.clientY);
@@ -62,6 +77,8 @@ class Main{
             this.prev = curr;
         }
     }
+
+    // 获取位置
     getPosition(clientX, clientY){
         var rect = this.canvas.getBoundingClientRect();
         return {
@@ -69,6 +86,7 @@ class Main{
             y: clientY - rect.top
         };
     }
+
     drawInput(){
         var ctx = this.input.getContext('2d');
         var img = new Image();
