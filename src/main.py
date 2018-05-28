@@ -47,7 +47,7 @@ app = Flask(__name__)
 
 @app.route('/api/mnist', methods=['post'])
 def mnist():
-    input = ((255 - np.array(request.json, dtype=uint8)) / 255.0).reshape(1, 784)
+    input = ((255 - np.array(request.json, dtype=np.uint8)) / 255.0).reshape(1, 784)
     output1 = regression(input)
     output2 = convolutional(input)
     return jsonify(results = [output1, output2])
