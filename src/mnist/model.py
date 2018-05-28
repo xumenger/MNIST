@@ -9,6 +9,6 @@ def regression(x):
     b = tf.Variable(tf.zeros([10]), name='b')
     # softmax是一个用来进行简单向量运算的函数
     # 下面是使用一个向量运算的乘法，也就是公式：Y = W * x + b
-    y = tf.nn.softmax(tf.matmul((x, W)) + b)
+    y = tf.nn.softmax(tf.matmul(x, W) + b)
 
     return y, [W, b]
