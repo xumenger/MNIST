@@ -29,3 +29,14 @@ saver = tf.train.Saver("variables")
 saver.restore(sess, "mnist/data/convolutional.ckpt")
 
 
+'''根据输入进行识别（线性）
+需要从前端获取输入
+'''
+def regression(input):
+    return sess.run(y1, feed_dict={x: input}).flatten().tolist()
+
+'''根据输入进行识别（卷积）
+'''
+def convolutional(input):
+    return sess.run(y2, feed_dict={x: input, keep_prob: 1.0}).flatten().tolist()
+
