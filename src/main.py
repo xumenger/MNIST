@@ -45,9 +45,9 @@ def convolutional(input):
 '''
 app = Flask(__name__)
 
-@qpp.route('/')
+@app.route('/')
 def index():
-    return render_template('inde.html')
+    return render_template('index.html')
 
 @app.route('/api/mnist', methods=['post'])
 def mnist():
