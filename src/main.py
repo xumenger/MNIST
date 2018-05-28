@@ -40,3 +40,18 @@ def regression(input):
 def convolutional(input):
     return sess.run(y2, feed_dict={x: input, keep_prob: 1.0}).flatten().tolist()
 
+
+'''Flask定义接口
+'''
+app = Flask(__name__)
+
+@app.route('/api/mnist', method=['post'])
+def mnist():
+    input = ((255 - np.array(request.json, dtype=uint8)) / 255.0).reshape(1, 784)
+    output1 = regression(input)
+    output2 = convolutional(input)
+    return jsonify(results = [output1, output2])
+
+
+
+
